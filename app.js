@@ -30,9 +30,7 @@ app.use('/', (req, res)=>{
 mongoose.connect('mongodb+srv://sahebbali253:saheb123@cluster0.uggzivc.mongodb.net/?retryWrites=true&w=majority')
 	.then(() => {
 		console.log('Database Connected');
-		app.listen(4000, () => {
-			console.log("I'm listening on port 4000");
-		});
+		
 	})
 	.catch((e) => console.log(e));
 

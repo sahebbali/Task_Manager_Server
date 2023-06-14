@@ -1,4 +1,5 @@
-const app = require('./app');
-// app.listen(8000, ()=>{
-//     console.log("app runing @= 8000");
-// });
+const app=require("./app");
+const PORT=process.env.PORT || 8080;
+app.listen(PORT,function () {
+    console.log("App Run @8080")
+})
