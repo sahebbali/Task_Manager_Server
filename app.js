@@ -23,21 +23,10 @@ app.use(express.json({limit: '50mb'}))
 // app.use(express.urlencoded({limit: '50mb'}))
 mongodb://localhost:27017
 app.use('/api/v1',router);
-// app.use('/', (req, res)=>{
-//   res.status(404).json({status: " The status fail", data: "Not Found"})
-// })
+app.use('/', (req, res)=>{
+  res.status(404).json({status: " The status fail", data: "Not Found"})
+})
 
-// const URL = 'mongodb://localhost:27017/attendance-db';
-// const OPTION = {
-//   user: 'testuser777',
-//   pass: 'test7777',
-//   autoIndex: true,
-//   authSource: 'admin' // replace with the authentication database name
-// };
-// mongoose.connect(URL,(error)=>{
-//   console.log("Database Connected Successfull!");;
-//   console.log("The Error",error);
-// })
 mongoose.connect('mongodb+srv://sahebbali253:saheb123@cluster0.uggzivc.mongodb.net/?retryWrites=true&w=majority')
 	.then(() => {
 		console.log('Database Connected');
