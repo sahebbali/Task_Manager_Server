@@ -2,15 +2,26 @@ const TasksModel = require('../models/TasksModel');
 const { login } = require('./UsersController');
 
 exports.createTask =(req, res)=>{
-    let reqBody = req.body;
-    let location = '../../public'
-    TasksModel.create(reqBody, (err, data)=>{
+    let reqBody=req.body
+    reqBody.email=req.headers['email'];
+    TasksModel.create(reqBody,(err,data)=>{
         if(err){
-            res.status(400).json({status:"fail", data: err});
-        } else {
-            res.status(200).json({status:"Success", data: data});
+            res.status(200).json({status:"fail",data:err})
+        }
+        else{
+            res.status(200).json({status:"success",data:data})
         }
     })
+};
+
+exports.getAllTasks = (req, res) => {
+  TasksModel.find({}, (err, data) => {
+    if (err) {
+      res.status(400).json({ status: 'fail', data: err });
+    } else {
+      res.status(200).json({ status: 'success', data: data });
+    }
+  });
 };
 
 exports.deleteTask =(req,res)=>{
@@ -36,7 +47,7 @@ exports.updateTasksStatus = (req, res)=>{
         if(err){
             res.status(400).json({status:" fail", data: err});
         } else{
-            res.status(200).json({status:"Success", data: data});
+            res.status(200).json({status:"Success  to data", data: data});
         }
     })
 };
@@ -45,31 +56,28 @@ exports.updateTasksStatus = (req, res)=>{
 exports.listTaskByStatus=(req,res)=>{
     let status= req.params.status;
     let email=req.headers['email'];
+    console.log(email);
+    console.log(status);
     TasksModel.aggregate([
-        {$match:{status:status,email:email}},
-        {$project:{_id:1,title:1,description:1, status:1,
+        {$match:{status:status,email:email.trim()}},
+        {$project:{
+                _id:1,title:1,description:1, status:1,
                 createdDate:{
                     $dateToString:{
                         date:"$createdDate",
                         format:"%d-%m-%Y"
                     }
                 }
-            }
-        },
+            }}
     ], (err,data)=>{
-        console.log("data is ",data);
         if(err){
             res.status(400).json({status:"fail",data:err})
         }
         else{
-            console.log(status);
-            console.log(email);
-            res.status(200).json({status:"success",data: data})
-           
+            res.status(200).json({status:"success",data:data})
         }
     })
-};
-
+}
 
 
 exports.taskStatusCount=(req,res)=>{
@@ -77,12 +85,12 @@ exports.taskStatusCount=(req,res)=>{
     TasksModel.aggregate([
         {$match:{email:email}},
         {$group:{_id:"$status",sum:{$count: {}}}}
-    ], (err,da)=>{
+    ], (err,data)=>{
         if(err){
             res.status(400).json({status:"fail",data:err})
         }
         else{
-            res.status(200).json({status:"success",data:da})
+            res.status(200).json({status:"success",data:data})
         }
     })
 }
