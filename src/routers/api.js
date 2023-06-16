@@ -7,7 +7,7 @@ const router  = express.Router();
 router.post('/registration',UsersController.registration);
 router.post('/login',UsersController.login);
 router.post('/profileUpdate',AuthVerifyMiddleware, UsersController.profileUpdate);
-router.post('/profileDetails', AuthVerifyMiddleware, UsersController.profileDetails);
+router.get('/profileDetails', AuthVerifyMiddleware, UsersController.profileDetails);
 
 
 router.post('/createTask', AuthVerifyMiddleware, TasksController.createTask);
