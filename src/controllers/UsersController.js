@@ -66,6 +66,7 @@ exports.profileDetails=(req,res)=>{
 
 exports.RecoverVerifyEmail = async (req, res)=>{
     let email =  req.params.email;
+    console.log(email)
     let OTPCode = Math.floor(100000 + Math.random() * 900000);
 
     try {
@@ -80,7 +81,8 @@ exports.RecoverVerifyEmail = async (req, res)=>{
             res.status(400).json({status: "fail", data: "No User Found"});
         }
     } catch (error) {
-        res.status(400).json({status: 'fail', data:error});
+        res.status(400).json({status: 'fail', data:error.message});
+        console.log(error)
     }
 };
 
