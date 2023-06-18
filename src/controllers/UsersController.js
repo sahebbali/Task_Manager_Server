@@ -64,27 +64,29 @@ exports.profileDetails=(req,res)=>{
     })
 }
 
-exports.RecoverVerifyEmail = async (req, res)=>{
-    let email =  req.params.email;
-    console.log(email)
-    let OTPCode = Math.floor(100000 + Math.random() * 900000);
-
+exports.RecoverVerifyEmail=async (req,res)=>{
+    let email = req.params.email;
+    let OTPCode = Math.floor(100000 + Math.random() * 900000)
     try {
-        let UserCount = (await UsersModel.aggregate([{$match: {email: email}},{$count: "total"}]));
-        if(UserCount.length > 0) {
+        // Email Account Query
+        let UserCount = (await UsersModel.aggregate([{$match: {email: email}}, {$count: "total"}]))
+        if(UserCount.length>0){
             // OTP Insert
-            let CreateOTP  = await OTPModel.create({email: email, otp: OTPCode})
+            let CreateOTP = await OTPModel.create({email: email, otp: OTPCode})
             // Email Send
-            let SendEmail =  await SendEmailUtility(email, "Your PIN Code is + " +OTPCode, "Task Manager PIN Varification");
-            res.status(200).json({status:"Success", data: SendEmail});
-        } else{
-            res.status(400).json({status: "fail", data: "No User Found"});
+            let SendEmail = await SendEmailUtility(email,"Your PIN Code is= "+OTPCode,"Task Manager PIN Verification")
+            res.status(200).json({status: "success", data: SendEmail})
         }
-    } catch (error) {
-        res.status(400).json({status: 'fail', data:error.message});
-        console.log(error)
+        else{
+            res.status(200).json({status: "fail", data: "No User Found"})
+        }
+
+    }catch (e) {
+        res.status(200).json({status: "fail", data:e})
     }
-};
+
+}
+
 
 exports.RecoverVerifyOTP=async (req,res)=>{
     let email = req.params.email;

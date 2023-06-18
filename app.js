@@ -9,7 +9,7 @@ const  rateLimit  = require('express-rate-limit');
 const mongoose = require('mongoose');
 const router = require('./src/routers/api');
 const app = new express();
-const limiter = rateLimit({windowMs:15*60*1000, max:3000})
+const limiter = rateLimit({windowMs:15*60*1000, max:30000})
 
 app.use(bodyParser.json({ extended: true }));
 
@@ -21,6 +21,8 @@ app.use(mongoSanitize())
 app.use(limiter)
 app.use(express.json({limit: '50mb'}))
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+// app.use(express.json({limit: '500mb'}));
+// app.use(express.urlencoded({limit: '500mb'}));
 mongodb://localhost:27017
 app.use('/api/v1',router);
 // app.use('/', (req, res)=>{
